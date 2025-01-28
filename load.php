@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Icreative Wordpress Cache Clear
- * Description: Creates a Rest API route to cache Wordpress Cache.
+ * Description: Creates a Rest API route to clear Wordpress Cache.
  * Version: 1.0.0
  * Author: Icreative
  */
@@ -18,6 +18,15 @@ add_action('rest_api_init', function () {
         'permission_callback' => 'icwcc_cache_clear_token_auth',
     ));
 });
+
+function icwcc_purge_w3_total_cache(): void
+{
+    if (!class_exists('\W3TC\Dispatcher')) {
+        return;
+    }
+    $o = \W3TC\Dispatcher::component('CacheFlush');
+    $o->flush_all();
+}
 
 function icwcc_purge_breeze_cache(): void
 {
@@ -44,6 +53,7 @@ function icwcc_handle_cache_clear_request(): array
 {
     icwcc_purge_cf_cache();
     icwcc_purge_breeze_cache();
+    icwcc_purge_w3_total_cache();
 
     return [
         'success' => true,

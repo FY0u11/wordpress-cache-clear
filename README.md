@@ -1,1 +1,2 @@
-# wordpress-cache-clear
+# Icreative Wordpress Cache Clear Plugin
+
